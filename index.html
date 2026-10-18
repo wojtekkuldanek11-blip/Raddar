@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Past Simple Challenge ✨</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --purple: #7758e8;
+  --pink: #ff6b9d;
+  --blue: #55b8f5;
+  --green: #20b486;
+  --bg: #f6f4ff;
+  --ink: #302d4a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 30px 16px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%, #ffe2ef 0, transparent 25%),
+    radial-gradient(circle at 90% 80%, #d9f5ff 0, transparent 28%),
+    var(--bg);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 920px;
+  margin: auto;
+}
+
+.hero {
+  text-align: center;
+  padding: 28px 20px;
+  border-radius: 28px;
+  color: white;
+  background: linear-gradient(120deg, #7857e8, #b06af4, #ff78ad);
+  box-shadow: 0 12px 30px #8e70d533;
+}
+
+.hero .emoji { font-size: 42px; }
+
+h1 {
+  font-size: clamp(25px, 5vw, 39px);
+  margin: 5px 0;
+  font-weight: 800;
+}
+
+.hero p { margin: 8px 0 0; opacity: .95; }
+
+.card {
+  background: white;
+  border: 1px solid #ebe7fb;
+  border-radius: 22px;
+  padding: 24px;
+  margin-top: 22px;
+  box-shadow: 0 8px 25px #6554a00d;
+}
+
+h2 {
+  font-size: 19px;
+  margin: 0 0 15px;
+}
+
+.word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.word {
+  border: 2px solid #e5ddff;
+  background: #f4f0ff;
+  color: #6849cf;
+  border-radius: 13px;
+  padding: 9px 13px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.word:hover {
+  transform: translateY(-2px);
+  background: #e9e0ff;
+}
+
+.word.used {
+  opacity: .35;
+  text-decoration: line-through;
+}
+
+.hint {
+  font-size: 12px;
+  color: #8b86a4;
+  margin-top: 12px;
+}
+
+.story {
+  font-size: 15px;
+  line-height: 2.7;
+}
+
+.blank {
+  width: 145px;
+  max-width: 100%;
+  padding: 7px 9px;
+  margin: 3px 3px;
+  border: 2px solid #ddd6f5;
+  border-radius: 10px;
+  outline: none;
+  background: #faf9ff;
+  color: #6745cc;
+  font: 600 14px 'Poppins', sans-serif;
+  transition: .2s;
+}
+
+.blank:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px #7758e81c;
+  background: white;
+}
+
+.blank.correct {
+  border-color: var(--green);
+  background: #e5fff5;
+  color: #087c5a;
+}
+
+.blank.wrong {
+  border-color: #ff7190;
+  background: #fff0f4;
+  color: #ce4264;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 23px;
+}
+
+.btn {
+  border: none;
+  border-radius: 13px;
+  padding: 12px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.check {
+  color: white;
+  background: linear-gradient(100deg, #7858e8, #a16aef);
+  box-shadow: 0 5px 14px #7858e833;
+}
+
+.reset { background: #f0edfa; color: #65558c; }
+.show { background: #e3f8ff; color: #2587b6; }
+
+.result {
+  display: none;
+  margin-top: 18px;
+  padding: 17px;
+  border-radius: 15px;
+  background: #f2efff;
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+.progress-bg {
+  background: #eeeaf9;
+  height: 9px;
+  border-radius: 99px;
+  margin-top: 17px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #7758e8, #ff75ae);
+  transition: width .3s;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #9891b3;
+  padding: 24px 0 5px;
+}
+
+@media (max-width: 500px) {
+  .card { padding: 17px; }
+  .story { font-size: 14px; line-height: 2.6; }
+  .blank { width: 125px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <header class="hero">
+    <div class="emoji">🦄✨📚</div>
+    <h1>Past Simple Challenge</h1>
+    <p>Grammar practice • Level up your English!</p>
+  </header>
+
+  <section class="card">
+    <h2>🎨 Word Bank</h2>
+    <div class="word-bank" id="wordBank"></div>
+    <div class="hint">
+      Click a verb, then click a gap to insert it. You can also type your answers!
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📝 Complete the story</h2>
+
+    <div class="story">
+      Last month, a very unusual event
+      <input class="blank" data-answer="happened" aria-label="Gap 1">
+      in France, when hackers
+      <input class="blank" data-answer="attacked" aria-label="Gap 2">
+      the computer systems of hundreds of French supermarkets.
+
+      <br><br>
+
+      However, the hackers
+      <input class="blank" data-answer="didn't steal" aria-label="Gap 3">
+      money or customer details. Instead, they
+      <input class="blank" data-answer="changed" aria-label="Gap 4">
+      the settings for refrigerators and freezers. As a result, the temperature quickly
+      <input class="blank" data-answer="rose" aria-label="Gap 5">
+      to 50°C, spoiling tons of fresh food!
+
+      <br><br>
+
+      Supermarket workers
+      <input class="blank" data-answer="threw away" aria-label="Gap 6">
+      lots of meat, milk, cheese, and ice cream, putting it into huge bins. In some shops, the hot fridges even
+      <input class="blank" data-answer="started" aria-label="Gap 7">
+      small electrical fires. Major supermarket chains
+      <input class="blank" data-answer="suffered" aria-label="Gap 8">
+      losses in millions of euros.
+
+      <br><br>
+
+      The unusual cyberattack
+      <input class="blank" data-answer="shocked" aria-label="Gap 9">
+      store owners and customers alike. Police quickly
+      <input class="blank" data-answer="discovered" aria-label="Gap 10">
+      that the refrigerators were running on very old software, which
+      <input class="blank" data-answer="made" aria-label="Gap 11">
+      them an easy target. After the incident, all supermarket chains immediately
+      <input class="blank" data-answer="updated" aria-label="Gap 12">
+      their security programs.
+    </div>
+
+    <div class="progress-bg">
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn check" onclick="checkAnswers()">✅ Check answers</button>
+      <button class="btn show" onclick="showAnswers()">💡 Show answers</button>
+      <button class="btn reset" onclick="resetTask()">🔄 Try again</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite"></div>
+  </section>
+
+  <div class="footer">
+    Made with 💜 • Keep learning, keep shining!
+  </div>
+
+</div>
+
+<script>
+const verbs = [
+  "attack", "change", "discover", "happen",
+  "make", "rise", "shock", "start",
+  "not steal", "suffer", "throw away", "update"
+];
+
+const bank = document.getElementById("wordBank");
+const blanks = [...document.querySelectorAll(".blank")];
+let selectedVerb = null;
+
+verbs.forEach(verb => {
+  const button = document.createElement("button");
+  button.className = "word";
+  button.textContent = verb;
+  button.type = "button";
+
+  button.addEventListener("click", () => {
+    selectedVerb = verb;
+    document.querySelectorAll(".word").forEach(w =>
+      w.style.outline = "none"
+    );
+    button.style.outline = "3px solid #b9a5ff";
+
+    const target = document.activeElement;
+    if (target && target.classList.contains("blank")) {
+      target.value = verb;
+      target.dispatchEvent(new Event("input"));
+    }
+  });
+
+  bank.appendChild(button);
+});
+
+blanks.forEach(input => {
+  input.addEventListener("click", () => {
+    if (selectedVerb) {
+      input.value = selectedVerb;
+      input.dispatchEvent(new Event("input"));
+      input.focus();
+    }
+  });
+
+  input.addEventListener("input", () => {
+    input.classList.remove("correct", "wrong");
+    document.getElementById("result").style.display = "none";
+    updateBank();
+  });
+});
+
+function normalize(text) {
+  return text.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function updateBank() {
+  const used = new Set(blanks.map(input => normalize(input.value)).filter(Boolean));
+
+  document.querySelectorAll(".word").forEach(button => {
+    const verb = normalize(button.textContent);
+    button.classList.toggle("used", used.has(verb));
+  });
+}
+
+function checkAnswers() {
+  let score = 0;
+  let filled = 0;
+
+  blanks.forEach(input => {
+    const value = normalize(input.value);
+    const answer = normalize(input.dataset.answer);
+
+    input.classList.remove("correct", "wrong");
+
+    if (value) filled++;
+
+    if (value === answer) {
+      score++;
+      input.classList.add("correct");
+    } else {
+      input.classList.add("wrong");
+    }
+  });
+
+  document.getElementById("progress").style.width =
+    (score / blanks.length * 100) + "%";
+
+  const result = document.getElementById("result");
+  result.style.display = "block";
+
+  if (score === blanks.length) {
+    result.innerHTML = `🏆 Perfect! ${score}/12 — Amazing work! 🎉`;
+  } else {
+    result.innerHTML =
+      `⭐ Your score: ${score}/12 correct.<br>` +
+      `📝 Completed: ${filled}/12 gaps.<br>` +
+      `Keep going — correct answers are marked in green! 💜`;
+  }
+
+  updateBank();
+}
+
+function showAnswers() {
+  blanks.forEach(input => {
+    input.value = input.dataset.answer;
+    input.classList.remove("wrong");
+    input.classList.add("correct");
+  });
+
+  document.getElementById("progress").style.width = "100%";
+
+  const result = document.getElementById("result");
+  result.style.display = "block";
+  result.innerHTML = "💡 All answers revealed! Read the story again to practise.";
+
+  updateBank();
+}
+
+function resetTask() {
+  blanks.forEach(input => {
+    input.value = "";
+    input.classList.remove("correct", "wrong");
+  });
+
+  selectedVerb = null;
+
+  document.querySelectorAll(".word").forEach(button => {
+    button.classList.remove("used");
+    button.style.outline = "none";
+  });
+
+  document.getElementById("progress").style.width = "0%";
+  document.getElementById("result").style.display = "none";
+}
+</script>
+</body>
+</html>
