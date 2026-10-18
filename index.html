@@ -242,7 +242,8 @@ h2 {
       <br><br>
 
       However, the hackers
-      <input class="blank" data-answer="didn't steal" aria-label="Gap 3">
+      <input class="blank" data-answer="didn't steal|didnt steal|did not steal" aria-label="Gap 3">
+      
       money or customer details. Instead, they
       <input class="blank" data-answer="changed" aria-label="Gap 4">
       the settings for refrigerators and freezers. As a result, the temperature quickly
@@ -354,25 +355,31 @@ function updateBank() {
   });
 }
 
+
 function checkAnswers() {
   let score = 0;
   let filled = 0;
 
   blanks.forEach(input => {
     const value = normalize(input.value);
-    const answer = normalize(input.dataset.answer);
+
+    const answers = input.dataset.answer
+      .split("|")
+      .map(answer => normalize(answer));
+
+    const isCorrect = answers.includes(value);
 
     input.classList.remove("correct", "wrong");
 
     if (value) filled++;
 
-    if (value === answer) {
+    if (isCorrect) {
       score++;
       input.classList.add("correct");
     } else {
       input.classList.add("wrong");
     }
-  });
+  }); // ← Tego zamknięcia brakowało!
 
   document.getElementById("progress").style.width =
     (score / blanks.length * 100) + "%";
@@ -381,7 +388,8 @@ function checkAnswers() {
   result.style.display = "block";
 
   if (score === blanks.length) {
-    result.innerHTML = `🏆 Perfect! ${score}/12 — Amazing work! 🎉`;
+    result.innerHTML =
+      `🏆 Perfect! ${score}/12 — Amazing work! 🎉`;
   } else {
     result.innerHTML =
       `⭐ Your score: ${score}/12 correct.<br>` +
@@ -391,6 +399,7 @@ function checkAnswers() {
 
   updateBank();
 }
+
 
 function showAnswers() {
   blanks.forEach(input => {
